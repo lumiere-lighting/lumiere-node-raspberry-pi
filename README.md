@@ -2,13 +2,15 @@
 
 [Lumiere](http://lumiere.lighting/).  Change holiday lights around the world.
 
-Here you will find code and instructions on how to set up some Lumiere lights with a Raspberry Pi.  By default, it will talk with the main Lumiere server, but you can also set up your own [Lumiere server](https://github.com/lumiere-lighting/lumiere-server).
+Here you will find code and instructions on how to set up some Lumiere lights with a Raspberry Pi.  By default, it will talk with the main Lumiere application at [lumiere.lighting](http://lumiere.lighting), but you can also set up your own [Lumiere server](https://github.com/lumiere-lighting/lumiere-server).
 
 ## Ingredients
 
+There are links to products at Adafruit as reference points; though Adafruit is awesome, there is no requirement to buy products from them.
+
 ### Device
 
-* A [Raspberry Pi](http://www.raspberrypi.org/).  Buy from [Adafruit](http://www.adafruit.com/category/105).
+* A [Raspberry Pi](http://www.raspberrypi.org/).  There are many different kits and extensions at  [Adafruit](http://www.adafruit.com/category/105).  Note that these instructions were tested on a Model B Raspberry Pi.
 * (optional, but recommended) Raspberry Pi's come with a wired ethernet adapter, but more than likely you will want a wireless connection.  Try [this one](https://www.adafruit.com/product/814).
 
 ### Lights
@@ -37,6 +39,7 @@ The following are recommendations on things that will help connect things up, bu
 ### Raspberry Pi setup
 
 1. Setup your Raspberry Pi.  [Quick start guide](http://www.raspberrypi.org/help/quick-start-guide/).
+1. (optional) Setup your wifi.
 1. Enable SPI.
     * `sudo raspi-config`
     * Go to `Advanced options` and `enable SPI`.
@@ -75,7 +78,7 @@ You can run manually with the following command:
 1. `cd ~/lumiere-node-raspberry-pi && python lumiere.py`
 1.  Once running, change the lights at [lumiere.lighting](http://lumiere.lighting), or whatever [Lumiere server](https://github.com/lumiere-lighting/lumiere-server) is appropriate.
 
-#### Auto start
+### Auto start
 
 This adds an [Upstart](http://en.wikipedia.org/wiki/Upstart) script so that the lumiere script is run automatically on start up and restarts if something goes wrong.
 
@@ -83,7 +86,7 @@ This adds an [Upstart](http://en.wikipedia.org/wiki/Upstart) script so that the 
 1. Restart the Pi: `sudo shutdown -r now`
     * It should start automatically, but you can control the process manually with: `sudo service lumiere start|restart|status|stop`
 
-#### Auto turn off (optional)
+### Auto turn off (optional)
 
 If you want to turn off the Raspberry Pi at a specific time, add the following line to cron.  Note that this will not actually turn off the lights or stop power going to the Raspberry Pi, but simply shuts it down so that power can be disconnected.  An option is to then ahve an outlet timer that turns off a bit after the cron shutdown runs.
 
