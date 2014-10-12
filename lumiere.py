@@ -1,10 +1,11 @@
 from raspledstrip.ledstrip import *
 from raspledstrip.animation import *
 from raspledstrip.color import Color
+import os
 import requests
 import json
 import time
-import sys
+import traceback
 
 
 # Things that should be configurable
@@ -19,15 +20,20 @@ class Lumiere:
 
   def __init__(self):
     """
-    Constructor.
+    Constructor.  Read settings if there.
     """
-    self.ledCount = ledCount
-    self.base_url = api
-    self.currentID = None
-    self.ledArray = []
-    self.waitTime = waitTime
+    settings_file = 'settings.json';
+    self.settings = {};
+    if (os.path.isfile(settings_file)):
+      self.settings = json.loads(open(settings_file).read())
 
-    self.led = LEDStrip(ledCount)
+    self.lights = self.settings['lights'] if 'lights' in self.settings else 160
+    self.api = self.settings['api'] if 'api' in self.settings else 'http://lumiere.lighting'
+    self.poll_interval = self.settings['poll_interval'] if 'poll_interval' in self.settings else 6
+
+    self.current_id = None
+    self.light_array = []
+    self.led = LEDStrip(self.lights)
     self.led.all_off()
 
 
@@ -37,59 +43,59 @@ class Lumiere:
     """
     while True:
       try:
-        self.queryLights()
-        time.sleep(self.waitTime)
+        self.query_lumiere()
+        time.sleep(self.poll_interval)
       except (KeyboardInterrupt, SystemExit):
         raise
       except:
-        e = sys.exc_info()[0]
-        print 'Error: %s' % e
+        print traceback.format_exc()
 
 
-  def updateLights(self):
+  def set_lights(self):
     """
     Change the lights.
     """
-    self.fillArray()
+    self.fill_lights()
 
     # Animate
-    anim = FireFlies(self.led, self.ledArray, 1, 1, 0, self.led.lastIndex)
+    anim = FireFlies(self.led, self.light_array, 1, 1, 0, self.led.lastIndex)
     for i in range(50):
       anim.step()
       self.led.update()
 
     # Final fill
-    for li, l in enumerate(self.ledArray):
+    for li, l in enumerate(self.light_array):
       self.led.set(li, l)
     self.led.update()
 
 
-  def fillArray(self):
+  def fill_lights(self):
     """
     Fill up LED count with all the colors.
     """
-    self.ledArray = []
-    ledArray = []
+    self.light_array = []
+    light_array = []
     length = len(self.current['colors'])
 
-    for x in range(0, self.ledCount - 1):
-      ledArray.append(self.hex_to_rgb(self.current['colors'][x % length]))
+    for x in range(0, self.lights - 1):
+      light_array.append(self.hex_to_rgb(self.current['colors'][x % length]))
 
-    for li, l in enumerate(ledArray):
-      self.ledArray.append(Color(l[0], l[1], l[2]))
+    for li, l in enumerate(light_array):
+      self.light_array.append(Color(l[0], l[1], l[2]))
 
 
-  def queryLights(self):
+  def query_lumiere(self):
     """
     Make request to API.
     """
-    r = requests.get('%soutgoing' % (self.base_url))
-    self.current = r.json()
+    r = requests.get('%s/api/colors' % (self.api))
+    if r.status_code == requests.codes.ok:
+      self.current = r.json()
 
-    # Only update if new record
-    if self.currentID is None or self.currentID != self.current['_id']:
-      self.currentID = self.current['_id']
-      self.updateLights()
+      # Only update if new record
+      if self.current_id is None or self.current_id != self.current['_id']:
+        self.current_id = self.current['_id']
+        self.set_lights()
 
 
   def hex_to_rgb(self, value):

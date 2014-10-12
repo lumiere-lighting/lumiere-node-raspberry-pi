@@ -67,9 +67,19 @@ Here is an example of a near final configuration using the parts listed above.
 
 ![Near-final project](https://raw.github.com/lumiere-lighting/lumiere-node-raspberry-pi/master/images/near-final.jpg)
 
-## Running
+## Running and configuration
 
 This script needs to be run as a user that has root privileges as it needs access to the GPIO pins.  The default `pi` user will work fine.
+
+### Config
+
+To override some of the default config, use a `settings.json` file in the same directory as the `lumiere.py` file.  The defaults are the following:
+
+    {
+      "lights": 160,
+      "api": "http://lumiere.lighting",
+      "poll_interval": 6
+    }
 
 ### Manual and testing
 
