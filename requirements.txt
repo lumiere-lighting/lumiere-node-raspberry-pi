@@ -1,2 +1,2 @@
 Requests
-https://github.com/adammhaile/RPi-LPD8806/archive/master.zip
+git+git://github.com/adammhaile/RPi-LPD8806.git@f8a06226c0d5eb02f7894a2556d187229b9ff66c

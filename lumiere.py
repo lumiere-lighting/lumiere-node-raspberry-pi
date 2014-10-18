@@ -10,11 +10,6 @@ import time
 import traceback
 
 
-# Things that should be configurable
-ledCount = 32 * 5
-api = 'http://lumiere.meteor.com/'
-waitTime = 6
-
 class Lumiere:
   """
   Class to handle getting light information.

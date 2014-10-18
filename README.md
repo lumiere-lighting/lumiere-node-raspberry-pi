@@ -88,9 +88,10 @@ You can run manually with the following command:
 
 This adds an `init.d` script so that the lumiere script is run automatically on start up and restarts if something goes wrong.
 
+1. Make the lumiere script executable by others: `chmod +x lumiere.py`
 1. Link the script in to init.  (Update the location of the lumiere code as needed): `sudo cp /home/pi/lumiere-node-raspberry-pi/lumiere.init /etc/init.d/lumiere && sudo chmod +x /etc/init.d/lumiere`
 1. Test with `sudo /etc/init.d/lumiere start`
-1. Configure to get service to start on startup: `sudo update-rc.d /etc/init.d/lumiere defaults`
+1. Configure to get service to start on startup: `sudo update-rc.d lumiere defaults`
 1. Restart the Pi: `sudo shutdown -r now`
     * It should start automatically, but you can control the process manually with: `sudo /etc/init.d/lumiere start|restart|status|stop`
 1. Uninstall with: `sudo service lumiere uninstall`
