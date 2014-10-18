@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from raspledstrip.ledstrip import *
 from raspledstrip.animation import *
 from raspledstrip.color import Color
