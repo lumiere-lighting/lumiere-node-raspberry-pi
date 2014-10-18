@@ -43,13 +43,9 @@ The following are recommendations on things that will help connect things up, bu
 1. Enable SPI.
     * `sudo raspi-config`
     * Go to `Advanced options` and `enable SPI`.
-1. (optional, recommended, see below) Install Upstart: `sudo apt-get install upstart`
-1. Install python dev tools.  [Reference](http://raspberry.io/wiki/how-to-get-python-on-your-raspberrypi/).
-    1. `sudo apt-get install python-dev`
-    1. `curl -O http://python-distribute.org/distribute_setup.py`
-    1. `sudo python distribute_setup.py`
-    1. `curl -O https://raw.github.com/pypa/pip/master/contrib/get-pip.py`
-    1. `sudo python get-pip.py`
+1. Install python dev tools.
+    1. `sudo apt-get install python-dev python-setuptools`
+    1. `sudo easy_install pip`
 1. Get code: `cd ~ && git clone https://github.com/lumiere-lighting/lumiere-node-raspberry-pi.git && cd lumiere-node-raspberry-pi`
 1. Install Python packages: `sudo pip install -r requirements.txt`
 
@@ -90,11 +86,14 @@ You can run manually with the following command:
 
 ### Auto start
 
-This adds an [Upstart](http://en.wikipedia.org/wiki/Upstart) script so that the lumiere script is run automatically on start up and restarts if something goes wrong.
+This adds an `init.d` script so that the lumiere script is run automatically on start up and restarts if something goes wrong.
 
-1. Link the Upstart script in to init.  Update the location of the lumiere code as needed: `sudo cp /home/pi/lumiere-node-raspberry-pi/lumiere.upstart /etc/init/lumiere.conf && sudo chmod +x /etc/init/lumiere.conf`
+1. Link the script in to init.  (Update the location of the lumiere code as needed): `sudo cp /home/pi/lumiere-node-raspberry-pi/lumiere.init /etc/init.d/lumiere && sudo chmod +x /etc/init.d/lumiere`
+1. Test with `sudo /etc/init.d/lumiere start`
+1. Configure to get service to start on startup: `sudo update-rc.d /etc/init.d/lumiere defaults`
 1. Restart the Pi: `sudo shutdown -r now`
-    * It should start automatically, but you can control the process manually with: `sudo service lumiere start|restart|status|stop`
+    * It should start automatically, but you can control the process manually with: `sudo /etc/init.d/lumiere start|restart|status|stop`
+1. Uninstall with: `sudo service lumiere uninstall`
 
 ### Auto turn off (optional)
 
