@@ -1,3 +1,5 @@
+**DEPRECATED.  See `lumiere-client-*` projects.**
+
 # Lumière Raspberry Pi
 
 [Lumiere](http://lumiere.lighting/).  Change holiday lights around the world.
